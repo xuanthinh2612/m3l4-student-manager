@@ -1,0 +1,80 @@
+create database student_manager;
+use student_manager;
+create table address (id int , address varchar(200));
+create table classes ( id int, class_name varchar(200), language varchar(200), description varchar(500));
+create table student (id int , full_name varchar(200), address_id int , phone nvarchar(11) unique, class_id int);
+create table course (id int, course_name varchar(200), description varchar(500));
+create table point (id int, course_id int, student_id int , point int);
+
+alter table address add constraint primary key (id);
+alter table classes add constraint primary key (id);
+alter table student add constraint primary key (id);
+alter table course add constraint primary key (id);
+alter table point add constraint primary key (id);
+
+alter table address modify id int auto_increment ;
+alter table classes modify id int  auto_increment ;
+alter table student modify id int  auto_increment ;
+alter table course modify id int  auto_increment ;
+alter table point modify id int  auto_increment ;
+
+insert into address (address) value ('Thai Binh');
+insert into address (address) value ('Ha Noi');
+insert into address (address) value ('TP Ho Chi Minh');
+insert into address (address) value ('Hai Duong');
+insert into address (address) value ('Da Nang');
+insert into address (address) value ('Vung Tau');
+insert into address (address) value ('Lao Cai');
+insert into address (address) value ('Hung Yen');
+insert into address (address) value ('Nam Dinh');
+insert into address (address) value ('Bac Giang');
+
+insert into classes (class_name, language, description)  value ('C1020','java','6 months');
+insert into classes (class_name, language, description)  value ('C1021','C#','6 months');
+insert into classes (class_name, language, description)  value ('C1022','C++','6 months');
+insert into classes (class_name, language, description)  value ('C1023','PHP','6 months');
+insert into classes (class_name, language, description)  value ('C1024','C','6 months');
+
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 1',1,'03552626261',1);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 2',2,'03552626262',2);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 3',5,'0355262623',3);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 4',4,'03552626264',4);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 5',8,'03552626265',5);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 6',6,'03552626266',1);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 7',1,'03552626267',2);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 8',8,'03552626268',5);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 9',9,'03552626269',5);
+insert into student (full_name, address_id, phone, class_id) VALUE ('Thinh 10',1,'03552626260',2);
+
+insert into course (course_name, description)  value (' bootcamp1','learn only in 6 months');
+insert into course (course_name, description)  value (' bootcamp2','learn only in 6 months');
+insert into course (course_name, description)  value (' bootcamp3','learn only in 6 months');
+insert into course (course_name, description)  value (' bootcamp4','learn only in 6 months');
+insert into course (course_name, description)  value (' bootcamp5','learn only in 5 months');
+
+insert into point (course_id, student_id, point) VALUE (1,1,9);
+insert into point (course_id, student_id, point) VALUE (2,2,8);
+insert into point (course_id, student_id, point) VALUE (3,3,7);
+insert into point (course_id, student_id, point) VALUE (4,4,6);
+insert into point (course_id, student_id, point) VALUE (5,5,8);
+insert into point (course_id, student_id, point) VALUE (2,6,5);
+insert into point (course_id, student_id, point) VALUE (4,7,9);
+insert into point (course_id, student_id, point) VALUE (5,8,6);
+insert into point (course_id, student_id, point) VALUE (3,9,7);
+insert into point (course_id, student_id, point) VALUE (1,10,8);
+insert into point (course_id, student_id, point) VALUE (5,1,10);
+insert into point (course_id, student_id, point) VALUE (3,2,8);
+insert into point (course_id, student_id, point) VALUE (2,3,7);
+insert into point (course_id, student_id, point) VALUE (4,4,9);
+insert into point (course_id, student_id, point) VALUE (1,5,3);
+
+alter table student add constraint foreign key (address_id) references address (id), add foreign key (class_id) references classes(id);
+alter table point add constraint foreign key (course_id) references course(id), add foreign key (student_id) references student(id);
+
+select class_name, count(class_name) as students from classes join student s on classes.id = s.class_id group by class_name;
+select address, count(full_name) as students from address join student s on address.id = s.address_id group by address;
+select course_name, avg(point) as average_point  from course join point p on course.id = p.course_id group by course_name;
+
+
+select course_name, avg(point) as max_average_point from course join point p on course.id = p.course_id group by course_name having max_average_point >= 8;
+
